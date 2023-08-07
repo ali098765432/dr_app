@@ -160,4 +160,178 @@ router.post('/register', async (req, resp) => {
   }
 });
 
+router.get('/users', async (req, resp) => {
+  try {
+    // Fetch all users from the pa_user table
+    const fetchUsersQuery = 'SELECT * FROM pa_users';
+    db.query(fetchUsersQuery, (err, users) => {
+      if (err) {
+        console.error('Error while fetching users:', err);
+        return resp.status(500).json({ error: 'Something went wrong, please try again.' });
+      }
+
+      // Return the users as the response
+      resp.json({ users });
+    });
+  } catch (error) {
+    console.error('Error while fetching users:', error);
+    resp.status(500).json({ error: 'Something went wrong, please try again.' });
+  }
+});
+
+router.delete('/users/:userId', async (req, resp) => {
+  const userId = req.params.userId;
+
+  try {
+    // Check if the user exists in the database
+    const findUserQuery = 'SELECT * FROM pa_users WHERE id = ?';
+    db.query(findUserQuery, [userId], async (err, users) => {
+      if (err) {
+        console.error('Error while finding user:', err);
+        return resp.status(500).json({ error: 'Something went wrong, please try again.' });
+      }
+
+      if (users.length === 0) {
+        return resp.status(404).json({ result: 'User not found.' });
+      }
+
+      // Delete the user from the database
+      const deleteUserQuery = 'DELETE FROM pa_users WHERE id = ?';
+      db.query(deleteUserQuery, [userId], (err, result) => {
+        if (err) {
+          console.error('Error while deleting user:', err);
+          return resp.status(500).json({ error: 'Something went wrong, please try again.' });
+        }
+
+        resp.json({ result: 'User deleted successfully!' });
+      });
+    });
+  } catch (error) {
+    console.error('Error while deleting user:', error);
+    resp.status(500).json({ error: 'Something went wrong, please try again.' });
+  }
+});
+router.patch('/users/:userId/status', async (req, resp) => {
+  const userId = req.params.userId;
+  const { status } = req.body;
+
+  try {
+    // Check if the user exists in the database
+    const findUserQuery = 'SELECT * FROM pa_users WHERE id = ?';
+    db.query(findUserQuery, [userId], async (err, users) => {
+      if (err) {
+        console.error('Error while finding user:', err);
+        return resp.status(500).json({ error: 'Something went wrong, please try again.' });
+      }
+
+      if (users.length === 0) {
+        return resp.status(404).json({ result: 'User not found.' });
+      }
+
+      // Update the status of the user in the database
+      const updateUserQuery = 'UPDATE pa_users SET status = ? WHERE id = ?';
+      db.query(updateUserQuery, [status, userId], (err, result) => {
+        if (err) {
+          console.error('Error while updating user status:', err);
+          return resp.status(500).json({ error: 'Something went wrong, please try again.' });
+        }
+
+        resp.json({ result: 'User status updated successfully!' });
+      });
+    });
+  } catch (error) {
+    console.error('Error while updating user status:', error);
+    resp.status(500).json({ error: 'Something went wrong, please try again.' });
+  }
+});
+
+
+//curd operation doctor
+
+router.get('/doctors', async (req, resp) => {
+  try {
+    // Fetch all users from the pa_user table
+    const fetchUsersQuery = 'SELECT * FROM dr_users';
+    db.query(fetchUsersQuery, (err, users) => {
+      if (err) {
+        console.error('Error while fetching users:', err);
+        return resp.status(500).json({ error: 'Something went wrong, please try again.' });
+      }
+
+      // Return the users as the response
+      resp.json({ users });
+    });
+  } catch (error) {
+    console.error('Error while fetching users:', error);
+    resp.status(500).json({ error: 'Something went wrong, please try again.' });
+  }
+});
+
+router.delete('/doctors/:userId', async (req, resp) => {
+  const userId = req.params.userId;
+
+  try {
+    // Check if the user exists in the database
+    const findUserQuery = 'SELECT * FROM dr_users WHERE id = ?';
+    db.query(findUserQuery, [userId], async (err, users) => {
+      if (err) {
+        console.error('Error while finding user:', err);
+        return resp.status(500).json({ error: 'Something went wrong, please try again.' });
+      }
+
+      if (users.length === 0) {
+        return resp.status(404).json({ result: 'User not found.' });
+      }
+
+      // Delete the user from the database
+      const deleteUserQuery = 'DELETE FROM dr_users WHERE id = ?';
+      db.query(deleteUserQuery, [userId], (err, result) => {
+        if (err) {
+          console.error('Error while deleting user:', err);
+          return resp.status(500).json({ error: 'Something went wrong, please try again.' });
+        }
+
+        resp.json({ result: 'User deleted successfully!' });
+      });
+    });
+  } catch (error) {
+    console.error('Error while deleting user:', error);
+    resp.status(500).json({ error: 'Something went wrong, please try again.' });
+  }
+});
+router.patch('/doctors/:userId/status', async (req, resp) => {
+  const userId = req.params.userId;
+  const { status } = req.body;
+
+  try {
+    // Check if the user exists in the database
+    const findUserQuery = 'SELECT * FROM dr_users WHERE id = ?';
+    db.query(findUserQuery, [userId], async (err, users) => {
+      if (err) {
+        console.error('Error while finding user:', err);
+        return resp.status(500).json({ error: 'Something went wrong, please try again.' });
+      }
+
+      if (users.length === 0) {
+        return resp.status(404).json({ result: 'User not found.' });
+      }
+
+      // Update the status of the user in the database
+      const updateUserQuery = 'UPDATE dr_users SET status = ? WHERE id = ?';
+      db.query(updateUserQuery, [status, userId], (err, result) => {
+        if (err) {
+          console.error('Error while updating user status:', err);
+          return resp.status(500).json({ error: 'Something went wrong, please try again.' });
+        }
+
+        resp.json({ result: 'User status updated successfully!' });
+      });
+    });
+  } catch (error) {
+    console.error('Error while updating user status:', error);
+    resp.status(500).json({ error: 'Something went wrong, please try again.' });
+  }
+});
+
+
 module.exports = router;

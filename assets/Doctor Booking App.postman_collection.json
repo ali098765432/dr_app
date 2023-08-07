@@ -1,0 +1,851 @@
+{
+	"info": {
+		"_postman_id": "754a81f7-0eb2-4b7b-b415-e51835985880",
+		"name": "Doctor Booking App",
+		"description": "The Doctor Booking Overall API collection provides a set of API endpoints to facilitate doctor booking and management. It includes essential functionalities such as user authentication, user registration, doctor search, appointment booking, managing patient reviews and ratings, retrieving doctor availability, and accessing user notifications. These APIs allow users to browse, book, and manage appointments with doctors, provide feedback through reviews and ratings, and receive important notifications related to their appointments. The collection aims to streamline the process of doctor booking and enhance the overall user experience in the context of healthcare services.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "17487284",
+		"_collection_link": "https://www.postman.com/triotos/workspace/public/collection/17487284-754a81f7-0eb2-4b7b-b415-e51835985880?action=share&creator=17487284&source=collection_link"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Add",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"phone_no\": \"919078475289\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/auth/add",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"auth",
+								"add"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Check_dr",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"phone_no\": \"919078475289\",\n    \"otp\": 710520\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/auth/dr/check",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"auth",
+								"dr",
+								"check"
+							]
+						},
+						"description": "Will call for Doctor Users"
+					},
+					"response": []
+				},
+				{
+					"name": "Check_pa",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"phone_no\": \"919078475289\",\n    \"otp\": 765890\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/auth/pa/check",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"auth",
+								"pa",
+								"check"
+							]
+						},
+						"description": "Call of Patient Users"
+					},
+					"response": []
+				}
+			],
+			"description": "Auth service will be used for login and sign up on both screen, the main purpose of auth is just to verify the phone_no, as all the authentication is based on the phone no.\n\nFirst Auth Add Service will hit that will generate the OTP and send on the user's phone_no, then Check service will call that verify the OTP and send the user's detail in response, if user exist."
+		},
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "dr_users",
+					"item": [
+						{
+							"name": "List",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"search\" : \"Physiotherapist\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/drUsers/list",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"drUsers",
+										"list"
+									]
+								},
+								"description": "Get list of all doctors, you can also get list on the basis of some attributes, like Doctor Profession, First Name, Last Name, Address, and Hospital.  \nLike you wnat to search Physiotherapist, then body will be like:\n\n``` json\n{\n    \"search\": \"Physiotherapist\"\n}\n\n```\n\nIt will give list of those doctor who belong to this profession only. if you want to get all list without any filter leave body empty or null in search."
+							},
+							"response": []
+						},
+						{
+							"name": "Get",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/drUsers/1",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"drUsers",
+										"1"
+									]
+								},
+								"description": "Get Specific Doctor Detail, against the dr_id."
+							},
+							"response": [
+								{
+									"name": "Get",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{url}}/drUsers/1",
+											"host": [
+												"{{url}}"
+											],
+											"path": [
+												"drUsers",
+												"1"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "X-Powered-By",
+											"value": "Express"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json; charset=utf-8"
+										},
+										{
+											"key": "Content-Length",
+											"value": "277"
+										},
+										{
+											"key": "ETag",
+											"value": "W/\"115-+Pc1yN7AtC1rxI3rIqTWzhvyFeA\""
+										},
+										{
+											"key": "Date",
+											"value": "Fri, 14 Jul 2023 17:07:58 GMT"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=5"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"id\": 1,\n    \"f_name\": \"dummy\",\n    \"l_name\": \"dr\",\n    \"phone_no\": \"919078475289\",\n    \"email\": \"uyerue\",\n    \"address\": \"dummy address\",\n    \"gender\": \"male\",\n    \"profession\": \"dr\",\n    \"hospital\": \"here\",\n    \"experience\": \"2\",\n    \"fee\": 12,\n    \"img\": null,\n    \"created_at\": \"2023-07-13T11:04:04.000Z\",\n    \"updated_at\": \"2023-07-14T13:46:15.000Z\"\n}"
+								}
+							]
+						},
+						{
+							"name": "Add",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n   \"f_name\":\"dummy5\",\n   \"l_name\":\"dr\",\n   \"phone_no\":\"234522232789\",\n   \"email\":\"uyerue\",\n   \"address\":\"dummy address\",\n   \"gender\":\"male\",\n   \"profession\":\"dr\",\n   \"hospital\":\"here\",\n   \"experience\":\"2\",\n   \"fee\":12\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/drusers/add",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"drusers",
+										"add"
+									]
+								},
+								"description": "Add Doctor Detail in Database."
+							},
+							"response": []
+						},
+						{
+							"name": "Update",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n   \"f_name\":\"dummy5_updated\",\n   \"l_name\":\"dr\",\n   \"phone_no\":\"234522232789\",\n   \"email\":\"uyerue\",\n   \"address\":\"dummy address\",\n   \"gender\":\"male\",\n   \"profession\":\"dr\",\n   \"hospital\":\"here\",\n   \"experience\":\"2\",\n   \"fee\":12\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/drUsers/7",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"drUsers",
+										"7"
+									]
+								},
+								"description": "Update the Doctor detail against id."
+							},
+							"response": []
+						},
+						{
+							"name": "Delete",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/drUsers/7",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"drUsers",
+										"7"
+									]
+								},
+								"description": "Delete the Doctor detail against Doctor id."
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "pa_users",
+					"item": [
+						{
+							"name": "List",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"search\" : \"updated\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/paUsers/list",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"paUsers",
+										"list"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/paUsers/1",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"paUsers",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Add",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n   \"f_name\":\"pateint1\",\n   \"l_name\":\"sammy\",\n   \"phone_no\":\"234522232789\",\n   \"email\":\"uyerue\",\n   \"address\":\"dummy address\",\n   \"gender\":\"male\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/paUsers/add",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"paUsers",
+										"add"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n   \"f_name\":\"dummy5_updated\",\n   \"l_name\":\"dr\",\n   \"phone_no\":\"234522232789\",\n   \"email\":\"uyerue\",\n   \"address\":\"dummy address\",\n   \"gender\":\"male\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/paUsers/7",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"paUsers",
+										"7"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/paUsers/7",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"paUsers",
+										"7"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			],
+			"description": "Handler Users contains all the Doctor & Patient related APIs.  \nConventions:\n\n1. dr is used for Doctor related stuff\n2. pa is used for Patient related stuff"
+		},
+		{
+			"name": "Earnings",
+			"item": [
+				{
+					"name": "Get",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/earnings/dr/1",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"earnings",
+								"dr",
+								"1"
+							]
+						},
+						"description": "Get Earnings of Indiviual Doctor against doctor Id"
+					},
+					"response": []
+				},
+				{
+					"name": "Add",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"dr_id\": 1,\n    \"pa_id\": 2,\n    \"visit_id\": 1,\n    \"charges\": 500\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/earnings/dr/add",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"earnings",
+								"dr",
+								"add"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "All the Doctor 's Earnning related API calls."
+		},
+		{
+			"name": "Reviews",
+			"item": [
+				{
+					"name": "Get_Dr",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/reviews/dr/2",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"reviews",
+								"dr",
+								"2"
+							]
+						},
+						"description": "Get Doctor Reviews by Doctor id"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/reviews/pa/1",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"reviews",
+								"pa",
+								"1"
+							]
+						},
+						"description": "Delete review of Patient by Review id, Doctor cant able to update the review."
+					},
+					"response": []
+				},
+				{
+					"name": "Get_Pa",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/reviews/pa/1",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"reviews",
+								"pa",
+								"1"
+							]
+						},
+						"description": "Get Patient given reviews by Patient Id."
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"dr_id\": 2,\n    \"pa_id\": 1,\n    \"rating\" : 4,\n    \"review\" : \"Good oneherer\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/reviews/pa/1",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"reviews",
+								"pa",
+								"1"
+							]
+						},
+						"description": "Update review of Patient by Review Id, Doctor cant able to delete the review."
+					},
+					"response": []
+				},
+				{
+					"name": "Add",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"dr_id\": 2,\n    \"pa_id\": 1,\n    \"rating\" : 3.5,\n    \"review\" : \"Good one\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/reviews/add",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"reviews",
+								"add"
+							]
+						},
+						"description": "Add review"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Notifications",
+			"item": [
+				{
+					"name": "Get_dr",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/notifications/dr/1",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"notifications",
+								"dr",
+								"1"
+							]
+						},
+						"description": "Individual Doctor related Review & Rating."
+					},
+					"response": []
+				},
+				{
+					"name": "Get_pa",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/notifications/pa/1",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"notifications",
+								"pa",
+								"1"
+							]
+						},
+						"description": "Individual Patient related Review & Rating."
+					},
+					"response": []
+				},
+				{
+					"name": "Add",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"dr_id\": 1,\n    \"event\": \"Cancel event\",\n    \"detail\":\"Booking cancel\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/notifications/add",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"notifications",
+								"add"
+							]
+						},
+						"description": "Add Notificatin , here id doctor related notifcation then pa_id will be null, and if Patient related notification then dr_id will be null, or if notification is general you want to show to both (Doctor & Patient) then both dr_id, and pa_id will be null.\n\nFor Doctor Notification:\n\n``` json\n{\n    \"dr_id\": 1,\n    \"event\": \"Cancel event\",\n    \"detail\":\"Booking cancel\"\n}\n\n```\n\nFor Patient Related:\n\n``` json\n{\n    \"pa_id\": 1,\n    \"event\": \"Your booking has been Cancelled\",\n    \"detail\":\"Booking cancel\"\n}\n\n```\n\nFor General:\n\n``` json\n{\n    \"event\": \"App Update\",\n    \"detail\":\"Now you can do Video calls\"\n}\n\n```"
+					},
+					"response": []
+				}
+			],
+			"description": "Notification Related APIs, you can hit notifications Add API on any action from frontend, that you want to log and show to users."
+		},
+		{
+			"name": "Availability",
+			"item": [
+				{
+					"name": "Add",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"dr_id\": 1,\n    \"detail\":{\n        \"Monday\":{\n            \"0\":{\n                \"from\":\"value\",\n                \"to\":\"value\"\n            },\n            \"1\":{\n                \"from\":\"value\",\n                \"to\":\"value\"\n            },\n            \"2\":{\n                \"from\":\"value\",\n                \"to\":\"value\"\n            }\n        },\n        \"Tuesday\":{\n            \"0\":{\n                \"from\":\"value\",\n                \"to\":\"value\"\n            },\n            \"1\":{\n                \"from\":\"value\",\n                \"to\":\"value\"\n            },\n            \"2\":{\n                \"from\":\"value\",\n                \"to\":\"value\"\n            }\n        }\n    },\n    \"week_date\": \"10-07-2023\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/availability/add",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"availability",
+								"add"
+							]
+						},
+						"description": "Add availability of individual Doctor,  \nhere `week_date` will be the date of start of the Week means Monday.  \n`detail` contains detail of complete week, Each day slot will be inisde the day key in detail. There can be as many slots as you want in one day."
+					},
+					"response": []
+				},
+				{
+					"name": "Get_dr",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"week_date\":  \"10-07-2023\",\n    \"day\": \"Wednesday\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/availability/dr/1",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"availability",
+								"dr",
+								"1"
+							]
+						},
+						"description": "Fetch Individual Doctor availability, also apply filter on the bases of week_date and specifically day of the week too.\n\nday of the week field in optional if you dont give, reponse will contain complete week info."
+					},
+					"response": []
+				},
+				{
+					"name": "List",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"week_date\": \"10-07-2023\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/availability/list",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"availability",
+								"list"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"dr_id\": 1,\n    \"detail\":{\n        \"Monday\":{\n            \"0\":{\n                \"from\":\"value\",\n                \"to\":\"value\"\n            },\n            \"1\":{\n                \"from\":\"value\",\n                \"to\":\"value\"\n            }\n        },\n        \"Wednesday\":{\n            \"0\":{\n                \"from\":\"value\",\n                \"to\":\"value\"\n            },\n            \"1\":{\n                \"from\":\"value\",\n                \"to\":\"value\"\n            },\n            \"2\":{\n                \"from\":\"value\",\n                \"to\":\"value\"\n            }\n        }\n    },\n    \"week_date\": \"10-07-2023\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/availability/1",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"availability",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Visits",
+			"item": [
+				{
+					"name": "Get_dr",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/visits/dr/1",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"visits",
+								"dr",
+								"1"
+							]
+						},
+						"description": "All individual Doctor related visits."
+					},
+					"response": []
+				},
+				{
+					"name": "Get_pa",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/visits/pa/2",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"visits",
+								"pa",
+								"2"
+							]
+						},
+						"description": "All individual Patient related visits."
+					},
+					"response": []
+				},
+				{
+					"name": "Add",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"dr_id\":1,\n    \"pa_id\":2,\n    \"visit_no\":122,\n    \"charges\":500,\n    \"detail\":{\n        \"day\": \"Tuesday\",\n        \"from\": \"12:00\",\n        \"to\": \"14:00\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/visits/add",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"visits",
+								"add"
+							]
+						},
+						"description": "Add new visit detail."
+					},
+					"response": []
+				}
+			],
+			"description": "Visit APIs, when visit is done, info should be stored in earning table along with visit_id."
+		}
+	]
+}

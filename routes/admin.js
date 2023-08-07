@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const mysql = require('mysql');
 const jwt = require('jsonwebtoken');
 const jwtKey = 'ecomm';
+
 const db = require('../config/db'); 
 var router = express.Router(); 
 

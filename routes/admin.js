@@ -160,7 +160,7 @@ router.post('/register', async (req, resp) => {
   }
 });
 
-router.get('/users', async (req, resp) => {
+router.get('/patients', async (req, resp) => {
   try {
     // Fetch all users from the pa_user table
     const fetchUsersQuery = 'SELECT * FROM pa_users';
@@ -179,7 +179,7 @@ router.get('/users', async (req, resp) => {
   }
 });
 
-router.delete('/users/:userId', async (req, resp) => {
+router.delete('/patients/:userId', async (req, resp) => {
   const userId = req.params.userId;
 
   try {
@@ -208,39 +208,6 @@ router.delete('/users/:userId', async (req, resp) => {
     });
   } catch (error) {
     console.error('Error while deleting user:', error);
-    resp.status(500).json({ error: 'Something went wrong, please try again.' });
-  }
-});
-router.patch('/users/:userId/status', async (req, resp) => {
-  const userId = req.params.userId;
-  const { status } = req.body;
-
-  try {
-    // Check if the user exists in the database
-    const findUserQuery = 'SELECT * FROM pa_users WHERE id = ?';
-    db.query(findUserQuery, [userId], async (err, users) => {
-      if (err) {
-        console.error('Error while finding user:', err);
-        return resp.status(500).json({ error: 'Something went wrong, please try again.' });
-      }
-
-      if (users.length === 0) {
-        return resp.status(404).json({ result: 'User not found.' });
-      }
-
-      // Update the status of the user in the database
-      const updateUserQuery = 'UPDATE pa_users SET status = ? WHERE id = ?';
-      db.query(updateUserQuery, [status, userId], (err, result) => {
-        if (err) {
-          console.error('Error while updating user status:', err);
-          return resp.status(500).json({ error: 'Something went wrong, please try again.' });
-        }
-
-        resp.json({ result: 'User status updated successfully!' });
-      });
-    });
-  } catch (error) {
-    console.error('Error while updating user status:', error);
     resp.status(500).json({ error: 'Something went wrong, please try again.' });
   }
 });
@@ -299,9 +266,15 @@ router.delete('/doctors/:userId', async (req, resp) => {
     resp.status(500).json({ error: 'Something went wrong, please try again.' });
   }
 });
-router.patch('/doctors/:userId/status', async (req, resp) => {
+
+router.put('/doctors/:userId', async (req, resp) => {
   const userId = req.params.userId;
-  const { status } = req.body;
+  const updatedFields = req.body;
+
+  // Validation: Check if the userId is provided
+  if (!userId) {
+    return resp.status(400).json({ result: 'Please provide the user ID to update.' });
+  }
 
   try {
     // Check if the user exists in the database
@@ -316,22 +289,189 @@ router.patch('/doctors/:userId/status', async (req, resp) => {
         return resp.status(404).json({ result: 'User not found.' });
       }
 
-      // Update the status of the user in the database
-      const updateUserQuery = 'UPDATE dr_users SET status = ? WHERE id = ?';
-      db.query(updateUserQuery, [status, userId], (err, result) => {
+      // Generate the SQL update query dynamically based on the provided fields in the request body
+      let updateQuery = 'UPDATE dr_users SET ';
+      const updateValues = [];
+
+      for (const [key, value] of Object.entries(updatedFields)) {
+        updateQuery += `${key} = ?, `;
+        updateValues.push(value);
+      }
+
+      // Remove the trailing comma and space
+      updateQuery = updateQuery.slice(0, -2);
+
+      updateQuery += ' WHERE id = ?';
+      updateValues.push(userId);
+
+      // Update the user details in the database
+      db.query(updateQuery, updateValues, (err, result) => {
         if (err) {
-          console.error('Error while updating user status:', err);
+          console.error('Error while updating user:', err);
           return resp.status(500).json({ error: 'Something went wrong, please try again.' });
         }
 
-        resp.json({ result: 'User status updated successfully!' });
+        resp.json({ result: 'User details updated successfully!' });
       });
     });
   } catch (error) {
-    console.error('Error while updating user status:', error);
+    console.error('Error while updating user:', error);
     resp.status(500).json({ error: 'Something went wrong, please try again.' });
   }
 });
 
+//update users
+router.put('/patients/:userId', async (req, resp) => {
+  const userId = req.params.userId;
+  const updatedFields = req.body;
+
+  // Validation: Check if the userId is provided
+  if (!userId) {
+    return resp.status(400).json({ result: 'Please provide the user ID to update.' });
+  }
+
+  try {
+    // Check if the user exists in the database
+    const findUserQuery = 'SELECT * FROM pa_users WHERE id = ?';
+    db.query(findUserQuery, [userId], async (err, users) => {
+      if (err) {
+        console.error('Error while finding user:', err);
+        return resp.status(500).json({ error: 'Something went wrong, please try again.' });
+      }
+
+      if (users.length === 0) {
+        return resp.status(404).json({ result: 'User not found.' });
+      }
+
+      // Generate the SQL update query dynamically based on the provided fields in the request body
+      let updateQuery = 'UPDATE pa_users SET ';
+      const updateValues = [];
+
+      for (const [key, value] of Object.entries(updatedFields)) {
+        updateQuery += `${key} = ?, `;
+        updateValues.push(value);
+      }
+
+      // Remove the trailing comma and space
+      updateQuery = updateQuery.slice(0, -2);
+
+      updateQuery += ' WHERE id = ?';
+      updateValues.push(userId);
+
+      // Update the user details in the database
+      db.query(updateQuery, updateValues, (err, result) => {
+        if (err) {
+          console.error('Error while updating user:', err);
+          return resp.status(500).json({ error: 'Something went wrong, please try again.' });
+        }
+
+        resp.json({ result: 'User details updated successfully!' });
+      });
+    });
+  } catch (error) {
+    console.error('Error while updating user:', error);
+    resp.status(500).json({ error: 'Something went wrong, please try again.' });
+  }
+});
+
+router.post('/doctors', async (req, resp) => {
+  const {
+    f_name,
+    l_name,
+    phone_no,
+    email,
+    address,
+    gender,
+    profession,
+    hospital,
+    experience,
+    fee,
+    status,
+    created_at,
+    updated_at,
+  } = req.body;
+
+  // Validation: Check if all required fields are provided
+  if (!f_name || !l_name || !phone_no || !email || !address || !gender || !profession || !hospital || !experience || !fee || !status || !created_at || !updated_at) {
+    return resp.status(400).json({ result: 'Please provide all required user details.' });
+  }
+
+  try {
+    // Insert the new user into the database
+    const insertUserQuery =
+      'INSERT INTO dr_users (f_name, l_name, phone_no, email, address, gender, profession, hospital, experience, fee, status, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+
+    db.query(
+      insertUserQuery,
+      [
+        f_name,
+        l_name,
+        phone_no,
+        email,
+        address,
+        gender,
+        profession,
+        hospital,
+        experience,
+        fee,
+        status,
+        created_at,
+        updated_at,
+      ],
+      (err, result) => {
+        if (err) {
+          console.error('Error while adding user:', err);
+          return resp.status(500).json({ error: 'Something went wrong, please try again.' });
+        }
+
+        resp.json({ result: 'User added successfully!' });
+      }
+    );
+  } catch (error) {
+    console.error('Error while adding user:', error);
+    resp.status(500).json({ error: 'Something went wrong, please try again.' });
+  }
+});
+
+router.post('/patients', async (req, resp) => {
+  const {
+    f_name,
+    l_name,
+    phone_no,
+    email,
+    address,
+    gender,
+    status,
+    created_at,
+    updated_at,
+  } = req.body;
+
+  // Validation: Check if all required fields are provided
+  if (!f_name || !l_name || !phone_no || !email || !address || !gender || !status || !created_at || !updated_at) {
+    return resp.status(400).json({ result: 'Please provide all required user details.' });
+  }
+
+  try {
+    // Insert the new user into the database
+    const insertUserQuery =
+      'INSERT INTO pa_users (f_name, l_name, phone_no, email, address, gender, status, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)';
+
+    db.query(
+      insertUserQuery,
+      [f_name, l_name, phone_no, email, address, gender, status, created_at, updated_at],
+      (err, result) => {
+        if (err) {
+          console.error('Error while adding user:', err);
+          return resp.status(500).json({ error: 'Something went wrong, please try again.' });
+        }
+
+        resp.json({ result: 'User added successfully!' });
+      }
+    );
+  } catch (error) {
+    console.error('Error while adding user:', error);
+    resp.status(500).json({ error: 'Something went wrong, please try again.' });
+  }
+});
 
 module.exports = router;

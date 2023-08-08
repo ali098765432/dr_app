@@ -612,5 +612,23 @@ router.get('/locations', async (req, resp) => {
   }
 });
 
+router.get('/doctors-details-button', async (req, resp) => {
+  try {
+    const fetchDoctorsQuery = 'SELECT * FROM dr_users';
+
+    db.query(fetchDoctorsQuery, (err, results) => {
+      if (err) {
+        console.error('Error while fetching doctors:', err);
+        return resp.status(500).json({ error: 'Something went wrong, please try again.' });
+      }
+
+      resp.json({ doctors: results });
+    });
+  } catch (error) {
+    console.error('Error while fetching doctors:', error);
+    resp.status(500).json({ error: 'Something went wrong, please try again.' });
+  }
+});
+
 
 module.exports = router;

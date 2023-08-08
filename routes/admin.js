@@ -529,7 +529,7 @@ router.post('/rating-review', async (req, resp) => {
 router.get('/doctors/rating-reviews', async (req, resp) => {
   try {
     const fetchDoctorRatingQuery =
-      'SELECT dr_users.id AS doctor_id, dr_users.f_name AS doctor_first_name, dr_users.l_name AS doctor_last_name, AVG(rating) AS average_rating, COUNT(*) AS total_reviews ' +
+      'SELECT dr_users.id AS doctor_id, dr_users.f_name AS doctor_first_name, dr_users.l_name AS doctor_last_name, AVG(rating) AS average_rating, COUNT(*) AS total_reviews,rating_reviews.id ' +
       'FROM rating_reviews ' +
       'INNER JOIN dr_users ON rating_reviews.dr_id = dr_users.id ' +
       'GROUP BY dr_users.id, dr_users.f_name, dr_users.l_name';
@@ -551,7 +551,7 @@ router.get('/patients/rating-reviews', async (req, resp) => {
   try {
     const fetchDoctorRatingQuery =
       'SELECT dr_users.id AS doctor_id, dr_users.f_name AS doctor_first_name, dr_users.l_name AS doctor_last_name, ' +
-      'pa_users.id AS patient_id, pa_users.f_name AS patient_first_name, pa_users.l_name AS patient_last_name, rating, review ' +
+      'pa_users.id AS patient_id, pa_users.f_name AS patient_first_name, pa_users.l_name AS patient_last_name, rating, review,rating_reviews.id ' +
       'FROM rating_reviews ' +
       'INNER JOIN dr_users ON rating_reviews.dr_id = dr_users.id ' +
       'INNER JOIN pa_users ON rating_reviews.pa_id = pa_users.id';

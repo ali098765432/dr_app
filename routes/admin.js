@@ -570,5 +570,47 @@ router.get('/patients/rating-reviews', async (req, resp) => {
   }
 });
 
+router.get('/doctors/earnings', async (req, resp) => {
+  try {
+    const fetchDoctorEarningsQuery =
+      'SELECT dr_users.id AS doctor_id, dr_users.f_name AS doctor_first_name, dr_users.l_name AS doctor_last_name, ' +
+      'SUM(charges) AS total_earnings ' +
+      'FROM earnings ' +
+      'INNER JOIN dr_users ON earnings.dr_id = dr_users.id ' +
+      'GROUP BY dr_users.id, dr_users.f_name, dr_users.l_name';
+
+    db.query(fetchDoctorEarningsQuery, (err, results) => {
+      if (err) {
+        console.error('Error while fetching doctor earnings:', err);
+        return resp.status(500).json({ error: 'Something went wrong, please try again.' });
+      }
+
+      resp.json({ results });
+    });
+  } catch (error) {
+    console.error('Error while fetching doctor earnings:', error);
+    resp.status(500).json({ error: 'Something went wrong, please try again.' });
+  }
+});
+
+router.get('/locations', async (req, resp) => {
+  try {
+    const fetchLocationsQuery =
+      'SELECT hospital, COUNT(*) AS total_doctors FROM dr_users GROUP BY hospital';
+
+    db.query(fetchLocationsQuery, (err, results) => {
+      if (err) {
+        console.error('Error while fetching hospital attributes:', err);
+        return resp.status(500).json({ error: 'Something went wrong, please try again.' });
+      }
+
+      resp.json({ results });
+    });
+  } catch (error) {
+    console.error('Error while fetching hospital attributes:', error);
+    resp.status(500).json({ error: 'Something went wrong, please try again.' });
+  }
+});
+
 
 module.exports = router;

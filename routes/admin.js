@@ -474,4 +474,101 @@ router.post('/patients', async (req, resp) => {
   }
 });
 
+router.post('/rating-review', async (req, resp) => {
+  const { pa_id, dr_id, rating, review } = req.body;
+
+  // Validation: Check if all required fields are provided
+  if (!pa_id || !dr_id || !rating || !review) {
+    return resp.status(400).json({ result: 'Please provide pa_id, dr_id, rating, and review.' });
+  }
+
+  try {
+    // Check if the pa_user and dr_user exist in the database
+    const checkPaUserQuery = 'SELECT * FROM pa_users WHERE id = ?';
+    const checkDrUserQuery = 'SELECT * FROM dr_users WHERE id = ?';
+
+    db.query(checkPaUserQuery, [pa_id], async (err, paUsers) => {
+      if (err) {
+        console.error('Error while checking pa_user:', err);
+        return resp.status(500).json({ error: 'Something went wrong, please try again.' });
+      }
+
+      if (paUsers.length === 0) {
+        return resp.status(404).json({ result: 'Patient not found.' });
+      }
+
+      db.query(checkDrUserQuery, [dr_id], async (err, drUsers) => {
+        if (err) {
+          console.error('Error while checking dr_user:', err);
+          return resp.status(500).json({ error: 'Something went wrong, please try again.' });
+        }
+
+        if (drUsers.length === 0) {
+          return resp.status(404).json({ result: 'Doctor not found.' });
+        }
+
+        // Insert the new rating and review into the database
+        const insertRatingReviewQuery =
+          'INSERT INTO rating_reviews (pa_id, dr_id, rating, review) VALUES (?, ?, ?, ?)';
+
+        db.query(insertRatingReviewQuery, [pa_id, dr_id, rating, review], (err, result) => {
+          if (err) {
+            console.error('Error while adding rating and review:', err);
+            return resp.status(500).json({ error: 'Something went wrong, please try again.' });
+          }
+
+          resp.json({ result: 'Rating and review added successfully!' });
+        });
+      });
+    });
+  } catch (error) {
+    console.error('Error while adding rating and review:', error);
+    resp.status(500).json({ error: 'Something went wrong, please try again.' });
+  }
+});
+router.get('/doctors/rating-reviews', async (req, resp) => {
+  try {
+    const fetchDoctorRatingQuery =
+      'SELECT dr_users.id AS doctor_id, dr_users.f_name AS doctor_first_name, dr_users.l_name AS doctor_last_name, AVG(rating) AS average_rating, COUNT(*) AS total_reviews ' +
+      'FROM rating_reviews ' +
+      'INNER JOIN dr_users ON rating_reviews.dr_id = dr_users.id ' +
+      'GROUP BY dr_users.id, dr_users.f_name, dr_users.l_name';
+
+    db.query(fetchDoctorRatingQuery, (err, results) => {
+      if (err) {
+        console.error('Error while fetching doctor ratings and reviews:', err);
+        return resp.status(500).json({ error: 'Something went wrong, please try again.' });
+      }
+
+      resp.json({ results });
+    });
+  } catch (error) {
+    console.error('Error while fetching doctor ratings and reviews:', error);
+    resp.status(500).json({ error: 'Something went wrong, please try again.' });
+  }
+});
+router.get('/patients/rating-reviews', async (req, resp) => {
+  try {
+    const fetchDoctorRatingQuery =
+      'SELECT dr_users.id AS doctor_id, dr_users.f_name AS doctor_first_name, dr_users.l_name AS doctor_last_name, ' +
+      'pa_users.id AS patient_id, pa_users.f_name AS patient_first_name, pa_users.l_name AS patient_last_name, rating, review ' +
+      'FROM rating_reviews ' +
+      'INNER JOIN dr_users ON rating_reviews.dr_id = dr_users.id ' +
+      'INNER JOIN pa_users ON rating_reviews.pa_id = pa_users.id';
+
+    db.query(fetchDoctorRatingQuery, (err, results) => {
+      if (err) {
+        console.error('Error while fetching doctor ratings and reviews:', err);
+        return resp.status(500).json({ error: 'Something went wrong, please try again.' });
+      }
+
+      resp.json({ results });
+    });
+  } catch (error) {
+    console.error('Error while fetching doctor ratings and reviews:', error);
+    resp.status(500).json({ error: 'Something went wrong, please try again.' });
+  }
+});
+
+
 module.exports = router;

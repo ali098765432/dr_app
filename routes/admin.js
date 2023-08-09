@@ -65,7 +65,7 @@ router.post('/login', async (req, resp) => {
               return resp.status(500).json({ error: 'Something went wrong, please try again.' });
             }
 
-            resp.json({ result: 'Login successful!' });
+            resp.json({ result: 'Login successful!',id:user['id']});
           });
         });
       } else {

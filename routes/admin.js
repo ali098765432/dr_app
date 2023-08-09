@@ -77,6 +77,41 @@ router.post('/login', async (req, resp) => {
     resp.status(500).json({ error: 'Something went wrong, please try again.' });
   }
 });
+// router.post('/login', async (req, resp) => {
+//   const { email, password } = req.body;
+
+//   if (!email || !password) {
+//     return resp.status(400).json({ result: 'Please provide email and password field both' });
+//   }
+
+//   try {
+//     const loginQuery = 'SELECT * FROM admin WHERE email = ?';
+//     db.query(loginQuery, [email], async (err, users) => {
+//       if (err) {
+//         console.error('Error while logging in:', err);
+//         return resp.status(500).json({ error: 'Something went wrong, please try again.' });
+//       }
+
+//       if (users.length === 0) {
+//         return resp.status(404).json({ result: 'No user found.' });
+//       }
+
+//       const user = users[0];
+
+//       // Compare the hashed password with the provided password
+//       const passwordMatch = await bcrypt.compare(password, user.password);
+
+//       if (passwordMatch) {
+//         resp.json({ result: 'Login successful!' });
+//       } else {
+//         resp.status(401).json({ result: 'Invalid password' });
+//       }
+//     });
+//   } catch (error) {
+//     console.error('Error while logging in:', error);
+//     resp.status(500).json({ error: 'Something went wrong, please try again.' });
+//   }
+// });
 router.post('/logout', async (req, resp) => {
   const { email } = req.body;
 
@@ -135,7 +170,7 @@ router.post('/register', async (req, resp) => {
         console.error('Error while checking email:', err);
         return resp.status(500).json({ error: 'Something went wrong, please try again.' });
       }
-
+s
       if (users.length > 0) {
         return resp.status(409).json({ result: 'Email already exists.' });
       }
